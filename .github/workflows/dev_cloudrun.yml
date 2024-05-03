@@ -1,0 +1,86 @@
+name: Deploy app
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: 'read'
+  id-token: 'write'
+  checks: 'write'
+env:
+  PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+
+jobs:
+  # <-------------------  BUILD IMAGE -------------------->
+  build-image:
+    name: Build Image
+    needs: unit-test
+    runs-on: self-hosted
+    outputs:
+      image-name: ${{ steps.build-image.outputs.imageFullName }}
+      image-tag: ${{ steps.build-image.outputs.tags }}
+      branch: ${{ env.GITHUB_REF_SLUG_URL }}
+    steps:
+      # PREP STEPS
+      - name: Checkout the code
+        uses: actions/checkout@v2
+
+      - name: Slugify github variables
+        uses: rlespinasse/github-slug-action@v4
+
+      - name: Authenticate to GCP (SA Key)
+        id: auth
+        uses: google-github-actions/auth@v1
+        with:
+          credentials_json: ${{ secrets.APPLICATION_SA }}
+          export_default_credentials: true
+
+      # BUILD AND PUSH THE IMAGE
+      - name: Build & Push Image
+        id: build-image
+        uses: mr-smithers-excellent/docker-build-push@v6
+        with:
+          image: ${{ env.PROJECT_ID }}/${{ env.GITHUB_REPOSITORY_NAME_PART_SLUG_URL }}
+          registry: "eu.gcr.io"
+          username: _json_key
+          password: ${{ secrets.APPLICATION_SA }}
+
+  # <------------------ DEPLOY APP to GCP -------------------->
+  deploy-app:
+    name: Deploy app
+    needs: [ build-image, unit-test ]
+    runs-on: self-hosted
+    outputs:
+      env_url: ${{ steps.deploy.outputs.url }}
+    environment:
+      name: ${{ needs.build-image.outputs.branch }}
+      url: ${{ steps.deploy.outputs.url }}
+    steps:
+      - name: Slugify github variables
+        uses: rlespinasse/github-slug-action@v4
+
+      - name: Authenticate to GCP (SA Key)
+        id: auth
+        uses: google-github-actions/auth@v1
+        with:
+          credentials_json: ${{ secrets.APPLICATION_SA }}
+
+      - name: Deploy to Cloud Run
+        id: deploy
+        run: |-
+          gcloud auth login --brief --cred-file="${{ steps.auth.outputs.credentials_file_path }}" --quiet
+          gcloud run deploy ${{ env.GITHUB_REF_SLUG_URL }}-${{ env.GITHUB_REPOSITORY_NAME_PART_SLUG }} \
+                      --port 8080 \
+                      --project ${{ env.PROJECT_ID }}\
+                      --region "europe-west1" \
+                      --image "${{ needs.build-image.outputs.image-name }}:${{ needs.build-image.outputs.image-tag }}" \
+                      --memory "2048Mi" \
+                      --cpu "1" \
+                      --timeout "5m" \
+                      --concurrency "45" \
+                      --min-instances "0" \
+                      --max-instances "1" \
+                      --service-account ${{ secrets.GCP_SA_ACCNT_NAME }} \
+                      --platform managed \
+                      --no-allow-unauthenticated

@@ -38,8 +38,6 @@ FROM nginx:alpine AS frontend
 # Copy the HTML file into the nginx directory
 COPY ui/index.html /usr/share/nginx/html/index.html
 
-# Expose port 80
-EXPOSE 80
 
 # Copy backend files to the nginx directory
 COPY --from=backend /app /app
