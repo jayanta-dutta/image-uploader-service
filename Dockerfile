@@ -43,7 +43,7 @@ COPY ui/index.html /usr/share/nginx/html/index.html
 COPY --from=backend /app /app
 
 # Change the ownership of the backend files to the non-root user
-RUN chown -R nginx:nginx /app
+RUN chown -R nginx:nginx /app  && ls -lrt
 
 # Start Nginx and the Python application
 CMD service nginx start && python /app/app.py
