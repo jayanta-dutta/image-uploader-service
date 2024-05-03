@@ -15,7 +15,6 @@ jobs:
   # <-------------------  BUILD IMAGE -------------------->
   build-image:
     name: Build Image
-    needs: unit-test
     runs-on: self-hosted
     outputs:
       image-name: ${{ steps.build-image.outputs.imageFullName }}
