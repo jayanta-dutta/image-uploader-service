@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Upload Image</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+
+    form {
+      margin-bottom: 20px;
+    }
+
+    #imageGrid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      grid-gap: 10px;
+    }
+
+    .imageItem {
+      border: 1px solid #ddd;
+      padding: 10px;
+      text-align: center;
+    }
+
+    .imageItem img {
+      max-width: 100%;
+      max-height: 100%;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Upload Image</h1>
+  <form id="uploadForm" enctype="multipart/form-data">
+    <input type="file" id="fileInput" name="file" accept="image/*" />
+    <button type="submit">Upload Image</button>
+  </form>
+
+  <div id="imageGrid"></div>
+
+  <button id="viewImagesBtn">View Images</button>
+
+  <script>
+    async function uploadImage(event) {
+      event.preventDefault();
+      const form = event.target;
+      const formData = new FormData(form);
+      // Retrieve the file input element
+      const fileInput = document.getElementById("fileInput");
+
+      // Check if a file has been selected
+      if (!fileInput.files || fileInput.files.length === 0) {
+        console.error("No file chosen - choose a file to proceed");
+        return;
+      }
+      try {
+        const response = await fetch("http://localhost:8080/api/submit", {
+          method: "post",
+          body: formData,
+        });
+        if (response.ok) {
+          form.reset();
+        } else {
+          console.error("Error uploading image:", response.statusText);
+        }
+      } catch (error) {
+        console.error("Error uploading image:", error);
+      }
+    }
+
+    const uploadForm = document.getElementById("uploadForm");
+    uploadForm.addEventListener("submit", uploadImage);
+
+    async function listImages() {
+      imageGrid.innerHTML = "";
+
+      try {
+        const response = await fetch("http://localhost:8080/api/list");
+        if (response.ok) {
+          const data = await response.json();
+          const images = data.images;
+          if (Array.isArray(images)) {
+            images.forEach((image) => {
+              const imageItem = document.createElement("div");
+              imageItem.classList.add("imageItem");
+
+              const img = document.createElement("img");
+              img.src = image.url;
+              imageItem.appendChild(img);
+
+              const filenameElement = document.createElement("p");
+              filenameElement.textContent = image.filename;
+              imageItem.appendChild(filenameElement);
+
+              imageGrid.appendChild(imageItem);
+            });
+          } else {
+            console.error("Error fetching images: Invalid response format");
+          }
+        } else {
+          console.error("Error fetching images:", response.statusText);
+        }
+      } catch (error) {
+        console.error("Error fetching images:", error);
+      }
+    }
+
+    viewImagesBtn.addEventListener("click", listImages);
+
+  </script>
+</body>
+
+</html>
