@@ -67,7 +67,7 @@ jobs:
 
       - name: check image name and tags
         run: |-
-          echo "Image name:" ${{ needs.build-image.outputs.image-name }
+          echo "Image name:" ${{ needs.build-image.outputs.image-name }}
           echo "image tag:" ${{ needs.build-image.outputs.image-tag }}
 
       - name: Deploy to Cloud Run
