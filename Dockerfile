@@ -12,7 +12,7 @@ WORKDIR /app
 
 # Copy the dependencies file and the application files
 COPY api/requirements.txt .
-COPY api/app.py .
+COPY api/main.py .
 
 # Install any dependencies
 RUN pip install --no-cache-dir -r requirements.txt
@@ -44,4 +44,4 @@ CMD ["sh", "-c", "exec gunicorn --bind :$PORT --workers 1 --threads 8 --timeout 
 #RUN chown -R nginx:nginx /app  && ls -lrt
 #
 ## Start Nginx and the Python application
-#CMD service nginx start && python /app/app.py
+#CMD service nginx start && python /app/main.py

@@ -11,7 +11,7 @@ WORKDIR /app
 
 # Copy the dependencies file to the working directory
 COPY requirements.txt .
-COPY app.py .
+COPY main.py .
 
 # Install any dependencies
 RUN pip install --no-cache-dir -r requirements.txt
