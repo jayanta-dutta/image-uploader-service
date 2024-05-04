@@ -3,5 +3,5 @@ gunicorn
 flask-cors
 werkzeug
 numpy
-opencv-python
+pillow
 flasgger
