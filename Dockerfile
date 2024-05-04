@@ -30,18 +30,18 @@ USER appuser
 # Command to run the application
 CMD ["sh", "-c", "exec gunicorn --bind :$PORT --workers 1 --threads 8 --timeout 0 main:app"]
 
-## Stage 2: Frontend - Nginx
-#FROM nginx:alpine AS frontend
-#
-## Copy the HTML file into the nginx directory
-#COPY ui/index.html /usr/share/nginx/html/index.html
-#
-#
-## Copy backend files to the nginx directory
-#COPY --from=backend /app /app
-#
-## Change the ownership of the backend files to the non-root user
-#RUN chown -R nginx:nginx /app  && ls -lrt
-#
-## Start Nginx and the Python application
-#CMD service nginx start && python /app/main.py
+# Stage 2: Frontend - Nginx
+FROM nginx:alpine AS frontend
+
+# Copy the HTML file into the nginx directory
+COPY ui/index.html /usr/share/nginx/html/index.html
+
+
+# Copy backend files to the nginx directory
+COPY --from=backend /app /app
+
+# Change the ownership of the backend files to the non-root user
+RUN chown -R nginx:nginx /app
+
+# Start both Nginx and Python application using a shell script
+CMD ["sh", "-c", "/usr/sbin/nginx -g 'daemon off;' & gunicorn --bind :$PORT --workers 1 --threads 8 --timeout 0 main:app"]
