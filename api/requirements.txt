@@ -3,3 +3,4 @@ flask-cors
 werkzeug
 numpy
 opencv-python
+flasgger

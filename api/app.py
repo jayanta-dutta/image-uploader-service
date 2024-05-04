@@ -16,14 +16,16 @@ import cv2
 from flask import Flask, request, jsonify, url_for, send_from_directory
 from werkzeug.utils import secure_filename
 from flask_cors import CORS
+from flasgger import Swagger
 
 app = Flask(__name__)
 CORS(app)
+swagger = Swagger(app)
 
 # configure logging
 logging.basicConfig(filename="app.log", level=logging.DEBUG)
 
-ALLOWED_FILE_EXTENSION = {"jpg", "png", "jpeg", "gif", "svg"}
+ALLOWED_FILE_EXTENSION = {"jpg", "png", "jpeg"}
 TARGET_IMAGE_WIDTH = 1500
 app.config["IMAGE_UPLOAD_FOLDER"] = "../uploads"
 
@@ -64,7 +66,20 @@ def resize_image(image_path, target_width):
 def upload_image():
     """
     Upload image to file store location
-    :return: JSON response indicating success or failure.
+    ---
+    parameters:
+      - name: file
+        in: formData
+        type: file
+        required: true
+        description: The file to upload.
+    responses:
+      201:
+        description: Image uploaded successfully.
+      400:
+        description: Bad request. Invalid image file or no image file found.
+      500:
+        description: Internal Server Error. Error in resizing image.
     """
     if "file" not in request.files:
         error_msg = "no image file part in request"
@@ -101,9 +116,13 @@ def upload_image():
 @app.route("/api/list", methods=["GET"])
 def list_images():
     """
-    List all images stored in the upload folder alog with their urls
-    :return: JSON response containing a list of image information
-             with image_name and url
+    List all images stored in the upload folder along with their urls
+    ---
+    responses:
+      200:
+        description: List of image information with image_name and url.
+      500:
+        description: Internal Server Error. Error listing images.
     """
     image_folder = app.config["IMAGE_UPLOAD_FOLDER"]
     try:

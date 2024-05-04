@@ -3,8 +3,8 @@
 ## Table of Contents
 - [Introduction](#introduction)
 - [Features](#Features)
-- [Base URL](#Base_URL)
 - [Endpoints](#API-Endpoints)
+  - [Base URL](#Base_URL)
   - [Upload Image](#Upload-Image)
   - [List/view images](#List-Images)
 - [Installation](#Installation)
@@ -20,12 +20,16 @@ This API is useful for application that require image upload functionality with 
 - Upload images and resize them to a predefined width.
 - List all uploaded images along with their URLs.
 
+
+# API-Endpoints
+
 # Base_URL
 
 http://localhost:8080/api/
 
-# API-Endpoints
-
+Once application is running refer to the below link for **API documentation**
+    
+    http://localhost:8080/apidocs/
 # Upload-Image
 Uploads an image to the server. The uploaded image is resized to a predefined width.
 
@@ -108,10 +112,11 @@ To test the API locally, follow these steps:
 
 1. Make sure the Flask server is running (python app.py).
 2. Use tools like cURL or Postman to send requests to the specified endpoints for backend API.
-3. Verify the responses and functionality as per the documentation.
-4. Then test the frontend by selecting an image file and click 'Upload Image' button. if successful then check the uploaded file under 'uploads' folder in the code directory in local.
+3. It's also easy to test the backend. Simply navigate to the API documentation page at http://localhost:8080/apidocs/ and test each API endpoint.
+4. Verify the responses and functionality as per the documentation.
+5. Afterward, test the frontend by selecting an image file and clicking the 'Upload Image' button. If successful, you can verify the uploaded file in the 'uploads' folder within the local code directory
    ![Frontend UI Page](uploads/UI_Page.jpg)
-5. To view all the uploaded images click 'View Images' button, it will show all the images uploaded.
+6. To view all the uploaded images, click the 'View Images' button. It will display all the uploaded images
 
 
 # Considerations

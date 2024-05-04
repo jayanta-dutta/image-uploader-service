@@ -42,6 +42,7 @@ jobs:
         with:
           image: ${{ env.PROJECT_ID }}/${{ env.GITHUB_REPOSITORY_NAME_PART_SLUG_URL }}
           registry: "eu.gcr.io"
+          dockerfile: api/Dockerfile
           username: _json_key
           password: ${{ secrets.APPLICATION_SA }}
 
