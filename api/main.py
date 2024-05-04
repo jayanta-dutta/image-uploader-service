@@ -12,7 +12,7 @@ Steps:
 
 import os
 import logging
-import cv2
+from PIL import Image
 from flask import Flask, request, jsonify, url_for, send_from_directory
 from werkzeug.utils import secure_filename
 from flask_cors import CORS
@@ -46,20 +46,12 @@ def resize_image(image_path, target_width):
     :param target_width: desired width of resized image
     :return: None
     """
-    img = cv2.imread(image_path)
-    if img is None:
-        error_msg = f"image not found or could not be opened. {image_path}"
-        logging.error(error_msg)
-        raise FileNotFoundError(error_msg)
-    # check/calculate aspect ratio
-    height, width = img.shape[:2]
+    img = Image.open(image_path)
+    width, height = img.size
     aspect_ratio = width / height
     target_height = int(target_width / aspect_ratio)
-
-    # resize the image
-    resized_image = cv2.resize(img, (target_width, target_height))
-    # save the resized image
-    cv2.imwrite(image_path, resized_image)
+    resized_image = img.resize((target_width, target_height))
+    resized_image.save(image_path)
 
 
 @app.route("/api/submit", methods=["POST"])
