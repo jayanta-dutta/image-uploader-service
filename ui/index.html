@@ -59,7 +59,7 @@
         return;
       }
       try {
-        const response = await fetch("http://localhost:8080/api/submit", {
+        const response = await fetch(getBaseUrl() + "/api/submit", {
           method: "post",
           body: formData,
         });
@@ -80,7 +80,7 @@
       imageGrid.innerHTML = "";
 
       try {
-        const response = await fetch("http://localhost:8080/api/list");
+        const response = await fetch(getBaseUrl() + "/api/list");
         if (response.ok) {
           const data = await response.json();
           const images = data.images;
@@ -111,6 +111,16 @@
     }
 
     viewImagesBtn.addEventListener("click", listImages);
+    function getBaseUrl() {
+      // Check if running locally or running in cloud environment
+      if (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1") {
+        // Running locally
+        return "http://localhost:8080";
+      } else {
+        // Backend running on cloud, replace this with your cloud URL
+        return "https://image-uploader-service-qbiihidgwq-ew.a.run.app";
+      }
+    }
 
   </script>
 </body>
