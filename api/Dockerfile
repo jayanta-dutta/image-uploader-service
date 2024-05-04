@@ -28,7 +28,4 @@ RUN chown -R appuser:appuser ../uploads
 # Switch to the non-root user
 USER appuser
 
-# Expose port 8080 to the outside world
-EXPOSE 8080
-
-CMD ["python", "app.py"]
+CMD ["sh", "-c", "exec gunicorn --bind :$PORT --workers 1 --threads 8 --timeout 0 main:app"]
