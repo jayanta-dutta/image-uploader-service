@@ -41,7 +41,6 @@ jobs:
         uses: mr-smithers-excellent/docker-build-push@v6
         with:
           image: ${{ env.PROJECT_ID }}/${{ env.GITHUB_REPOSITORY_NAME_PART_SLUG_URL }}
-          dockerfile: api/Dockerfile
           registry: "eu.gcr.io"
           username: _json_key
           password: ${{ secrets.APPLICATION_SA }}
@@ -65,11 +64,6 @@ jobs:
         uses: google-github-actions/auth@v1
         with:
           credentials_json: ${{ secrets.APPLICATION_SA }}
-
-      - name: check image name and tags
-        run: |-
-          echo "Image name:" ${{ needs.build-image.outputs.image-name }}
-          echo "image tag:" ${{ needs.build-image.outputs.image-tag }}
 
       - name: Deploy to Cloud Run
         id: deploy

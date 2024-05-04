@@ -19,7 +19,7 @@ COPY api/main.py .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy the uploads directory
-COPY ../uploads /app/uploads
+COPY uploads /app/uploads
 
 # Change the ownership of the working directory to the non-root user
 RUN chown -R appuser:appuser /app
@@ -29,4 +29,3 @@ USER appuser
 
 # Command to run the application
 CMD ["sh", "-c", "exec gunicorn --bind :$PORT --workers 1 --threads 8 --timeout 0 main:app"]
-
