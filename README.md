@@ -10,6 +10,7 @@
 - [Installation](#Installation)
 - [Usage](#Usage)
 - [Local testing](#Local-Testing)
+- [Testing in cloud](#Testing-in-cloud)
 - [Considerations](#Considerations)
 
 # introduction
@@ -118,6 +119,11 @@ To test the API locally, follow these steps:
    ![Frontend UI Page](uploads/UI_Page.jpg)
 6. To view all the uploaded images, click the 'View Images' button. It will display all the uploaded images
 
+# Testing-in-cloud
+
+1. Backend service is deployed into GCP cloud in serverless computing and same way api can be tested
+   Url: https://image-uploader-service-qbiihidgwq-ew.a.run.app
+2. For testing purposes, the frontend can connect to the following URL
 
 # Considerations
 - To keep the application simple, considered using a local file store for storing images, opting to exclude storing them directly in PostgreSQL. 
