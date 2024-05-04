@@ -78,7 +78,7 @@ jobs:
                       --port 8080 \
                       --project ${{ env.PROJECT_ID }}\
                       --region "europe-west1" \
-                      --image "${{ needs.build-image.outputs.image-name }}:${{ needs.build-image.outputs.image-tag }}" \
+                      --image "eu.gcr.io/${{ env.PROJECT_ID }}/${{ env.GITHUB_REPOSITORY_NAME_PART_SLUG_URL }}:${{ needs.build-image.outputs.image-tag }}" \
                       --memory "2048Mi" \
                       --cpu "1" \
                       --timeout "5m" \
