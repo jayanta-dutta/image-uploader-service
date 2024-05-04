@@ -31,19 +31,19 @@ USER appuser
 
 # Expose port 8080 to the outside world
 EXPOSE 8080
-
-# Stage 2: Frontend - Nginx
-FROM nginx:alpine AS frontend
-
-# Copy the HTML file into the nginx directory
-COPY ui/index.html /usr/share/nginx/html/index.html
-
-
-# Copy backend files to the nginx directory
-COPY --from=backend /app /app
-
-# Change the ownership of the backend files to the non-root user
-RUN chown -R nginx:nginx /app  && ls -lrt
-
-# Start Nginx and the Python application
-CMD service nginx start && python /app/app.py
+CMD [ "python3", "-m" , "flask", "run", "--host=0.0.0.0"]
+## Stage 2: Frontend - Nginx
+#FROM nginx:alpine AS frontend
+#
+## Copy the HTML file into the nginx directory
+#COPY ui/index.html /usr/share/nginx/html/index.html
+#
+#
+## Copy backend files to the nginx directory
+#COPY --from=backend /app /app
+#
+## Change the ownership of the backend files to the non-root user
+#RUN chown -R nginx:nginx /app  && ls -lrt
+#
+## Start Nginx and the Python application
+#CMD service nginx start && python /app/app.py
