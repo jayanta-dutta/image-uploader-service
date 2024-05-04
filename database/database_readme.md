@@ -35,3 +35,7 @@ Replace your_database_name, your_username, and your_password with your preferred
         name VARCHAR(255),
         image_data BYTEA
     );
+
+* **Important note:** The password used in the code (dummy here) must not be stored in plain text format; instead, it should be fetched from a security vault in the code repository for best security practices.
+# Test image_storage_postgres application: 
+   Execute and test [application](image_storage_postgres.py) individually

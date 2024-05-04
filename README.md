@@ -105,7 +105,7 @@ To run the Image Uploader Service locally, follow these steps:
     'npm install http-server'
     * (alternatively, Nginx can be used in production environments due to its stability, performance, and extensive feature set.)
   - Run http-server: you can start the HTTP server by simply typing: http-server and ENTER.
-    This command will start the server and serve files from the current directory on port 8081 (or according to port usage) by default.
+    This command will start the server and serve files from the current directory on port 3000 ( or according to the port usage) by default.
   - Access your application: Once the server is running, you can access your application by opening a web browser and navigating to http://localhost:8081.
 
 # Local-Testing
@@ -121,11 +121,12 @@ To test the API locally, follow these steps:
 
 # Testing-in-cloud
 
-1. Backend service is deployed into GCP cloud in serverless computing and same way api can be tested
-   Url: https://image-uploader-service-qbiihidgwq-ew.a.run.app
+1. Backend service is deployed into GCP cloud in serverless computing and same way api can be tested.
+   **Note:** Currently, the URL is accessible for verification purposes; however, it will be restricted to authenticated access later.
+       https://image-uploader-service-qbiihidgwq-ew.a.run.app/apidocs
 2. For testing purposes, the frontend can connect to the following URL
 
 # Considerations
 - To keep the application simple, considered using a local file store for storing images, opting to exclude storing them directly in PostgreSQL. 
-- However, I also explored the option of saving images into the database and serving them from there (refer: `database` dir)
+- However, I also explored the option of saving images into the database and serving them from there (refer: `database` dir or [refer link](database/database_readme.md))
 - Additionally, in terms of scalability and performance, options like cloud storage or S3 are better alternatives to store and serve images.
