@@ -17,7 +17,7 @@ jobs:
     name: Build Image
     runs-on: self-hosted
     outputs:
-      image-name: ${{ steps.build-image.outputs.imageFullName }}
+      image-name: eu.gcr.io/${{ env.PROJECT_ID }}/${{ env.GITHUB_REPOSITORY_NAME_PART_SLUG_URL }}
       image-tag: ${{ steps.build-image.outputs.tags }}
       branch: ${{ env.GITHUB_REF_SLUG_URL }}
     steps:
